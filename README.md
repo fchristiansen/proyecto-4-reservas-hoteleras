@@ -44,3 +44,81 @@ Requisitos y entregables
 #### DESPLIEGUE (OPCIONAL)
 
 -   [ ] Crear una URL de producción para este proyecto, a través de [render.com](https://render.com)
+
+## Ejemplos de reservas
+
+---
+
+```
+Reserva con fecha:
+{
+  "hotel": "Hotel Paraíso",
+  "tipo_habitacion": "doble",
+  "estado_reserva": "confirmada",
+  "num_huespedes": 3,
+  "fecha_creacion": "2024-06-15"
+}
+Reserva con fecha:
+{
+  "hotel": "Hotel Paraíso",
+  "tipo_habitacion": "matrimonial",
+  "estado_reserva": "confirmada",
+  "num_huespedes": 2,
+  "fecha_creacion": "2024-11-27"
+}
+
+Reserva sin fecha de creación:
+(Se crea con la fecha del día)
+
+{
+  "hotel": "Hotel Paraíso",
+  "tipo_habitacion": "matrimonial",
+  "estado_reserva": "cancelada",
+  "num_huespedes": 2
+}
+
+{
+  "hotel": "Valle Nevado",
+  "tipo_habitacion": "single",
+  "estado_reserva": "pendiente",
+  "num_huespedes": 1
+}
+
+{
+  "hotel": "Hotel Paraíso",
+  "tipo_habitacion": "vip",
+  "estado_reserva": "disponible",
+  "num_huespedes": 1
+}
+
+{
+  "hotel": "Hotel Pucón",
+  "tipo_habitacion": "vip",
+  "estado_reserva": "disponible",
+  "num_huespedes": 2
+}
+
+Reservas con más de 5 huéspedes:
+
+{
+  "hotel": "Hotel Paraíso",
+  "tipo_habitacion": "familiar",
+  "estado_reserva": "pendiente",
+  "num_huespedes": 5
+}
+
+{
+  "hotel": "Hotel Paraíso",
+  "tipo_habitacion": "familiar",
+  "estado_reserva": "cancelada",
+  "num_huespedes": 5
+}
+
+{
+  "hotel": "Hotel Paraíso",
+  "tipo_habitacion": "familiar",
+  "estado_reserva": "disponible",
+  "num_huespedes": 8
+}
+
+```

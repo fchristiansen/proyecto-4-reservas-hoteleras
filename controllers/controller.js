@@ -6,8 +6,10 @@ let bookings = [];
 // Crear reserva
 
 exports.createBooking = async (req, res) => {
-	const { hotel, tipo_habitacion, estado_reserva, num_huespedes } = req.body;
-	const newBooking = new Booking(bookings.length + 1, hotel, tipo_habitacion, estado_reserva, num_huespedes, moment());
+	const { hotel, tipo_habitacion, estado_reserva, num_huespedes, fecha_creacion } = req.body;
+	const fechaCreacion = fecha_creacion ? moment(fecha_creacion) : moment();
+
+	const newBooking = new Booking(bookings.length + 1, hotel, tipo_habitacion, estado_reserva, num_huespedes, fechaCreacion);
 	bookings.push(newBooking);
 	res.json({
 		msg: 'Reserva creada con éxito',
@@ -15,20 +17,20 @@ exports.createBooking = async (req, res) => {
 	});
 };
 
-// Obtener la lista de reservas y segun parámetro de consulta
+// Obtener la lista de reservas y la lista segun parámetro de consulta
 
 exports.getBookings = async (req, res) => {
 	const { hotel, fecha_inicio, fecha_fin, tipo_habitacion, estado_reserva, num_huespedes } = req.query;
 
 	if (hotel) {
-		const bookingsFiltered = bookings.filter((booking) => booking.hotel === hotel);
-		if (bookingsFiltered.length === 0) {
-			return res.status(404).json({ msg: 'No se encontraron usuarios' });
+		const hotelsFiltered = bookings.filter((booking) => booking.hotel === hotel);
+		if (hotelsFiltered.length === 0) {
+			return res.status(404).json({ msg: 'No se encontraron hoteles.' });
 		}
 
 		return res.json({
-			msg: 'Hotel:',
-			data: bookingsFiltered,
+			msg: 'Nombre hotel:',
+			data: hotelsFiltered,
 		});
 	} else if (fecha_inicio && fecha_fin) {
 		const startDate = moment(fecha_inicio);
@@ -36,16 +38,34 @@ exports.getBookings = async (req, res) => {
 
 		const bookingsFiltered = bookings.filter((booking) => booking.fechaCreacion.isBetween(startDate, endDate) === true);
 		if (bookingsFiltered.length === 0) {
-			return res.status(404).json({ msg: 'No se encontraron reservas' });
+			return res.status(404).json({ msg: 'No se encontraron reservas.' });
 		}
 
 		return res.json({
-			msg: 'Reservas:',
+			msg: 'Reservas por fecha:',
+			data: bookingsFiltered,
+		});
+	} else if (tipo_habitacion) {
+		const roomsFiltered = bookings.filter((booking) => booking.tipo_habitacion === tipo_habitacion);
+		if (roomsFiltered.length === 0) {
+			return res.status(404).json({ msg: `No se encontraron habitaciones del tipo: ${tipo_habitacion}` });
+		}
+		return res.json({
+			msg: 'Tipos de habitación:',
+			data: roomsFiltered,
+		});
+	} else if (num_huespedes) {
+		const bookingsFiltered = bookings.filter((booking) => booking.num_huespedes > 5);
+		if (bookingsFiltered.length === 0) {
+			return res.status(404).json({ msg: `No se encontraron reservas con más de 5 huéspedes.` });
+		}
+		return res.json({
+			msg: 'Reservas con más de 5 huéspedes:',
 			data: bookingsFiltered,
 		});
 	} else {
 		return res.json({
-			msg: 'Reservas:',
+			msg: 'Todas las reservas:',
 			data: bookings,
 		});
 	}
