@@ -8,7 +8,6 @@ let bookings = [];
 exports.createBooking = async (req, res) => {
 	const { hotel, tipo_habitacion, estado_reserva, num_huespedes, fecha_creacion } = req.body;
 	const fechaCreacion = fecha_creacion ? moment(fecha_creacion) : moment();
-
 	const newBooking = new Booking(bookings.length + 1, hotel, tipo_habitacion, estado_reserva, num_huespedes, fechaCreacion);
 	bookings.push(newBooking);
 	res.json({
@@ -87,7 +86,7 @@ exports.getBookingsById = async (req, res) => {
 	});
 };
 
-// Actualizar información de una reserva
+// Actualizar información de una reserva.
 
 exports.updateBookingById = async (req, res) => {
 	const bookingId = parseInt(req.params.id);
@@ -108,7 +107,7 @@ exports.updateBookingById = async (req, res) => {
 
 exports.deleteBookingById = async (req, res) => {
 	const bookingId = parseInt(req.params.id);
-	const bookingIndex = bookings.findIndex((booking) => booking.id === bookingId); // 1 o 2 o 0
+	const bookingIndex = bookings.findIndex((booking) => booking.id === bookingId);
 
 	if (bookingIndex === -1) {
 		return res.status(404).json({ msg: `No se encontraron reservas con el id: ${bookingId}` });
