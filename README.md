@@ -53,10 +53,10 @@ Requisitos y entregables
 Reserva con fecha:
 {
   "hotel": "Hotel Paraíso",
-  "tipo_habitacion": "doble",
+  "tipo_habitacion": "familiar",
   "estado_reserva": "confirmada",
   "num_huespedes": 3,
-  "fecha_creacion": "2024-06-15"
+  "fecha_creacion": "2024-12-23"
 }
 Reserva con fecha:
 {
@@ -68,7 +68,7 @@ Reserva con fecha:
 }
 
 Reserva sin fecha de creación:
-(Se crea con la fecha del día)
+(Se crea con la fecha actual)
 
 {
   "hotel": "Hotel Paraíso",

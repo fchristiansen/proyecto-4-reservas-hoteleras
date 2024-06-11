@@ -16,7 +16,7 @@ exports.createBooking = async (req, res) => {
 	});
 };
 
-// Obtener la lista de reservas y la lista segun parámetro de consulta
+// Obtener la lista de reservas y una lista específica segun parámetro de consulta
 
 exports.getBookings = async (req, res) => {
 	const { hotel, fecha_inicio, fecha_fin, tipo_habitacion, estado_reserva, num_huespedes } = req.query;
@@ -61,6 +61,15 @@ exports.getBookings = async (req, res) => {
 		return res.json({
 			msg: 'Reservas con más de 5 huéspedes:',
 			data: bookingsFiltered,
+		});
+	} else if (estado_reserva) {
+		const reservationStatusFiltered = bookings.filter((booking) => booking.estado_reserva === estado_reserva);
+		if (reservationStatusFiltered.length === 0) {
+			return res.status(404).json({ msg: `No se encontraron habitaciones: ${estado_reserva}` });
+		}
+		return res.json({
+			msg: 'Estado de reserva:',
+			data: reservationStatusFiltered,
 		});
 	} else {
 		return res.json({
