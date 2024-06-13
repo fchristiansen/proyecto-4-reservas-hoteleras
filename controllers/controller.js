@@ -2,12 +2,14 @@ const Booking = require('../models/model');
 const moment = require('moment');
 
 let bookings = [];
-
+const reservaciones = ' reservaciones';
 // Crear reserva
 
 exports.createBooking = async (req, res) => {
 	const { hotel, tipo_habitacion, estado_reserva, num_huespedes, fecha_creacion } = req.body;
-	const fechaCreacion = fecha_creacion ? moment(fecha_creacion) : moment();
+	//const fechaCreacion = fecha_creacion ? moment(fecha_creacion) : moment();
+	const fechaCreacion = fecha_creacion && fecha_creacion.trim() !== '' ? moment(fecha_creacion) : moment();
+
 	const newBooking = new Booking(bookings.length + 1, hotel, tipo_habitacion, estado_reserva, num_huespedes, fechaCreacion);
 	bookings.push(newBooking);
 	res.json({
@@ -75,10 +77,16 @@ exports.getBookings = async (req, res) => {
 			msg: 'Reservas con más de 5 huéspedes:',
 			data: bookingsFiltered,
 		});
+	} else if (bookings.length === 0) {
+		// mostrar todas las reservas
+		return res.json({
+			msg: 'Sin reservaciones:',
+			data: bookings,
+		});
 	} else {
 		// mostrar todas las reservas
 		return res.json({
-			msg: 'Todas las reservas:',
+			msg: `Hay ${bookings.length > 1 ? bookings.length + reservaciones : bookings.length + ' reserva.'}`,
 			data: bookings,
 		});
 	}

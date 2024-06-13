@@ -1,10 +1,14 @@
 require('dotenv').config();
 const express = require('express');
+const cors = require('cors');
+
 const swaggerUI = require('swagger-ui-express');
 const swaggerJsDoc = require('swagger-jsdoc');
 const bookingRoutes = require('./routes/bookingRoutes');
 const path = require('path'); // path para trabajar con rutas de archivos y directorios
-
+const app = express();
+const port = process.env.PORT || 3000;
+const serverUrl = process.env.SERVER_URL || `http://localhost:${port}`;
 //  Opciones swaggerJsDoc
 const swaggerOptions = {
 	definition: {
@@ -13,6 +17,7 @@ const swaggerOptions = {
 			title: 'Node API for Hotel Reservations',
 			version: '1.0.0',
 		},
+
 		servers: [
 			{
 				url: serverUrl,
@@ -29,9 +34,6 @@ const swaggerOptions = {
 
 // Generamos la documentación de la API
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
-
-const app = express();
-const port = process.env.PORT || 3000;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
