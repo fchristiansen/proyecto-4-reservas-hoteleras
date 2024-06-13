@@ -58,14 +58,6 @@ Reserva con fecha:
   "num_huespedes": 3,
   "fecha_creacion": "2024-12-23"
 }
-Reserva con fecha:
-{
-  "hotel": "Hotel Paraíso",
-  "tipo_habitacion": "matrimonial",
-  "estado_reserva": "confirmada",
-  "num_huespedes": 2,
-  "fecha_creacion": "2024-11-27"
-}
 
 Reserva sin fecha de creación:
 (Se crea con la fecha actual)

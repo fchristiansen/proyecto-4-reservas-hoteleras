@@ -16,11 +16,11 @@ exports.createBooking = async (req, res) => {
 	});
 };
 
-// Obtener la lista de reservas y una lista específica segun parámetro de consulta
+// Obtener la lista de reservas y una lista específica segun parámetro de consulta.
 
 exports.getBookings = async (req, res) => {
 	const { hotel, fecha_inicio, fecha_fin, tipo_habitacion, estado_reserva, num_huespedes } = req.query;
-
+	// filtrar reservas por hotel
 	if (hotel) {
 		const hotelsFiltered = bookings.filter((booking) => booking.hotel === hotel);
 		if (hotelsFiltered.length === 0) {
@@ -31,6 +31,7 @@ exports.getBookings = async (req, res) => {
 			msg: 'Nombre hotel:',
 			data: hotelsFiltered,
 		});
+		// filtrar reservas por rango de fecha
 	} else if (fecha_inicio && fecha_fin) {
 		const startDate = moment(fecha_inicio);
 		const endDate = moment(fecha_fin);
@@ -44,6 +45,7 @@ exports.getBookings = async (req, res) => {
 			msg: 'Reservas por fecha:',
 			data: bookingsFiltered,
 		});
+		// filtrar reservas por tipo de habitacion (single, doble, matrimonial, familiar, etc)
 	} else if (tipo_habitacion) {
 		const roomsFiltered = bookings.filter((booking) => booking.tipo_habitacion === tipo_habitacion);
 		if (roomsFiltered.length === 0) {
@@ -53,15 +55,7 @@ exports.getBookings = async (req, res) => {
 			msg: 'Tipos de habitación:',
 			data: roomsFiltered,
 		});
-	} else if (num_huespedes) {
-		const bookingsFiltered = bookings.filter((booking) => booking.num_huespedes > 5);
-		if (bookingsFiltered.length === 0) {
-			return res.status(404).json({ msg: `No se encontraron reservas con más de 5 huéspedes.` });
-		}
-		return res.json({
-			msg: 'Reservas con más de 5 huéspedes:',
-			data: bookingsFiltered,
-		});
+		// filtrar reservas estado de reserva: reservada, cancelada, pendiente, pagada, etc.
 	} else if (estado_reserva) {
 		const reservationStatusFiltered = bookings.filter((booking) => booking.estado_reserva === estado_reserva);
 		if (reservationStatusFiltered.length === 0) {
@@ -71,7 +65,18 @@ exports.getBookings = async (req, res) => {
 			msg: 'Estado de reserva:',
 			data: reservationStatusFiltered,
 		});
+		// filtrar reservas con más de 5 huéspedes
+	} else if (num_huespedes) {
+		const bookingsFiltered = bookings.filter((booking) => booking.num_huespedes > 5);
+		if (bookingsFiltered.length === 0) {
+			return res.status(404).json({ msg: `No se encontraron reservas con más de 5 huéspedes.` });
+		}
+		return res.json({
+			msg: 'Reservas con más de 5 huéspedes:',
+			data: bookingsFiltered,
+		});
 	} else {
+		// mostrar todas las reservas
 		return res.json({
 			msg: 'Todas las reservas:',
 			data: bookings,
@@ -79,7 +84,7 @@ exports.getBookings = async (req, res) => {
 	}
 };
 
-// Obtener información de una reserva específica
+// Obtener información de una reserva específica:
 
 exports.getBookingsById = async (req, res) => {
 	const bookingId = parseInt(req.params.id);
@@ -90,12 +95,12 @@ exports.getBookingsById = async (req, res) => {
 	}
 
 	return res.json({
-		msg: 'Reserva obtenida.',
+		msg: 'Reserva obtenida con éxito.',
 		data: booking,
 	});
 };
 
-// Actualizar información de una reserva.
+// Actualizar información de una reserva específica:
 
 exports.updateBookingById = async (req, res) => {
 	const bookingId = parseInt(req.params.id);
