@@ -14,7 +14,7 @@ const swaggerOptions = {
 	definition: {
 		openapi: '3.0.0',
 		info: {
-			title: 'Node API for Hotel Reservations',
+			title: 'API para le gestión de reservas hoteleras.',
 			version: '1.0.0',
 		},
 
@@ -29,7 +29,7 @@ const swaggerOptions = {
 		para generar la documentación
 	*/
 
-	apis: [`${path.join(__dirname, './routes/*.js')}`],
+	apis: [path.join(__dirname, './routes/*.js')],
 };
 
 // Generamos la documentación de la API

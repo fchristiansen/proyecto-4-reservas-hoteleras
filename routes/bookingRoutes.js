@@ -13,26 +13,25 @@ const bookingController = require('../controllers/controller');
  *      properties:
  *        id:
  *          type: integer
- *          description: The Booking's unique identifier
+ *          description: El identificador único de una reserva.
  *        hotel:
  *          type: string
- *          description: The name of the Hotel
+ *          description: El nombre del hotel.
  *        tipo_habitacion:
  *          type: string
- *          format: date
- *          description: The date of the Booking
+ *          description: Tipo de la habitación (vip, matrimonial, single, doble, familiar, etc).
  *        estado_reserva:
  *          type: string
- *          description: The Booking's status
+ *          description: El estado de la reserva (reservada, pendiente, cancelada, pagada, etc)
  *        num_huespedes:
- *          type: number
- *          description: The price of the Bookinged item
- *        fecha_creacion:
  *          type: integer
- *          description: The quantity of the Bookinged item
+ *          description: El número de huéspedes por habitación.
+ *        fecha_creacion:
+ *          type: string
+ *          description: La fecha de reserva. Si está como un string vacío (""), se reserva con la fecha actual.
  *
  *      required:
- *
+ *        - id
  *        - hotel
  *        - tipo_habitacion
  *        - estado_reserva
@@ -40,24 +39,25 @@ const bookingController = require('../controllers/controller');
  *        - fecha_creacion
  *
  *      example:
-*
-*          hotel: "Hotel Paraíso"
-*          tipo_habitacion: "familiar"
-*          estado_reserva: "confirmada"
-*          num_huespedes: 3
-*          fecha_creacion: "2024-12-23"
+ *
+ *        hotel: "Hotel Paraíso"
+ *        tipo_habitacion: "familiar"
+ *        estado_reserva: "confirmada"
+ *        num_huespedes: 3
+ *        fecha_creacion: "2024-12-23"
  *
  *
 
  */
 
 // a. Crear Reserva
+
 /**
  * @swagger
  * /api/reservas:
  *  post:
- *    summary: Create a new booking
- *    tags: [Bookings]
+ *    summary: Crear una nueva reserva.
+ *    tags: [Reservas]
  *    requestBody:
  *      required: true
  *      content:
@@ -79,11 +79,11 @@ router.post('/reservas', bookingController.createBooking);
  * @swagger
  * /api/reservas:
  *  get:
- *    summary: Get the list of bookings
- *    tags: [Bookings]
+ *    summary: Obtener la lista de reservas.
+ *    tags: [Reservas]
  *    responses:
  *      200:
- *        description: A list of bookings
+ *        description: Una lista de reservas.
  *        content:
  *          application/json:
  *            schema:
@@ -99,30 +99,81 @@ router.get('/reservas', bookingController.getBookings);
  * @swagger
  * /api/reservas/{id}:
  *  get:
- *    summary: Get information of a specific booking
- *    tags: [Bookings]
+ *    summary: Obtener información de una reserva específica.
+ *    tags: [Reservas]
  *    parameters:
  *      - in: path
  *        name: id
  *        schema:
  *          type: integer
  *        required: true
- *        description: The booking's unique identifier
+ *        description: El identificador único de la reserva.
  *    responses:
  *      200:
- *        description: Information of the specific booking
+ *        description: Información de una reserva específica
  *        content:
  *          application/json:
  *            schema:
  *              $ref: '#/components/schemas/Booking'
  *      404:
- *        description: Booking not found
+ *        description: Reserva no encontrada.
  */
 
 router.get('/reservas/:id', bookingController.getBookingsById);
 
+// d. Actualizar información de un pedido específico
+/**
+ * @swagger
+ * /api/reservas/{id}:
+ *  put:
+ *    summary: Actualización de una reserva específica.
+ *    tags: [Reservas]
+ *    parameters:
+ *      - in: path
+ *        name: id
+ *        schema:
+ *          type: integer
+ *        required: true
+ *        description: El identificador único de la reserva.
+ *    requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *          schema:
+ *            $ref: '#/components/schemas/Booking'
+ *    responses:
+ *      200:
+ *        description: Reserva actualizada con éxito.
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/Booking'
+ *      404:
+ *        description: Reserva no encontrada.
+ */
+
 router.put('/reservas/:id', bookingController.updateBookingById);
 
+// e. Eliminar una reserva específica
+/**
+ * @swagger
+ * /api/reservas/{id}:
+ *  delete:
+ *    summary: Eliminar una reserva específica.
+ *    tags: [Reservas]
+ *    parameters:
+ *      - in: path
+ *        name: id
+ *        schema:
+ *          type: integer
+ *        required: true
+ *        description: El identificador único de la reserva.
+ *    responses:
+ *      200:
+ *        description: Reserva eliminada con éxito.
+ *      404:
+ *        description: Reserva no encontrada.
+ */
 router.delete('/reservas/:id', bookingController.deleteBookingById);
 
 module.exports = router;
