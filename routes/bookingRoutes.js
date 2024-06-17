@@ -29,12 +29,14 @@ const bookingController = require('../controllers/controller');
  *        fecha_creacion:
  *          type: string
  *          description: La fecha de reserva. Si está como un string vacío (""), se reserva con la fecha actual.
+ *
  *      required:
  *        - hotel
  *        - tipo_habitacion
  *        - estado_reserva
  *        - num_huespedes
  *        - fecha_creacion
+ *
  *      example:
  *        hotel: "Hotel Paraíso"
  *        tipo_habitacion: "familiar"
@@ -92,10 +94,15 @@ router.post('/reservas', bookingController.createBooking);
  *          type: string
  *        description: El tipo de habitación (vip, matrimonial, single, etc.)
  *      - in: query
- *        name: fecha_creacion
+ *        name: fecha_inicio
  *        schema:
  *          type: string
- *        description: la fecha de la reserva
+ *        description: la fecha inicio de la reserva
+ *      - in: query
+ *        name: fecha_fin
+ *        schema:
+ *          type: string
+ *        description: la fecha fin de la reserva
  *      - in: query
  *        name: estado_reserva
  *        schema:

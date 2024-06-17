@@ -8,7 +8,6 @@ const reservaciones = ' reservaciones';
 
 exports.createBooking = async (req, res) => {
 	const { hotel, tipo_habitacion, estado_reserva, num_huespedes, fecha_creacion } = req.body;
-	//const fechaCreacion = fecha_creacion ? moment(fecha_creacion) : moment();
 	const fechaCreacion = fecha_creacion && fecha_creacion.trim() !== '' ? moment(fecha_creacion) : moment();
 	const newBooking = new Booking(bookings.length + 1, hotel, tipo_habitacion, estado_reserva, num_huespedes, fechaCreacion);
 
@@ -18,7 +17,6 @@ exports.createBooking = async (req, res) => {
 		data: newBooking,
 	});
 };
-
 //  b. Obtener la lista de reservas
 
 exports.getBookings = async (req, res) => {
@@ -39,7 +37,11 @@ exports.getBookings = async (req, res) => {
 		const startDate = moment(fecha_inicio);
 		const endDate = moment(fecha_fin);
 
-		const bookingsFiltered = bookings.filter((booking) => booking.fechaCreacion.isBetween(startDate, endDate) === true);
+		const bookingsFiltered = bookings.filter((booking) => {
+			const fechaCreacion = moment(booking.fecha_creacion);
+			return fechaCreacion.isBetween(startDate, endDate, null, '[]');
+		});
+
 		if (bookingsFiltered.length === 0) {
 			return res.status(404).json({ msg: 'No se encontraron reservas.' });
 		}
@@ -70,13 +72,15 @@ exports.getBookings = async (req, res) => {
 		});
 		// filtrar reservas con más de 5 huéspedes
 	} else if (num_huespedes) {
-		const bookingsFiltered = bookings.filter((booking) => booking.num_huespedes > 5);
-		if (bookingsFiltered.length === 0) {
-			return res.status(404).json({ msg: `No se encontraron reservas con más de 5 huéspedes.` });
+		const numGuests = parseInt(num_huespedes);
+		const numGuestsFiltered = bookings.filter((booking) => booking.num_huespedes > numGuests);
+
+		if (numGuestsFiltered.length === 0) {
+			return res.status(404).json({ msg: `No se encontraron reservas con más de ${numGuests} huéspedes.` });
 		}
 		return res.json({
-			msg: 'Reservas con más de 5 huéspedes:',
-			data: bookingsFiltered,
+			msg: `Reservas con más de ${numGuests} huéspedes:`,
+			data: numGuestsFiltered,
 		});
 	} else if (bookings.length === 0) {
 		// mostrar que no hay reservas
@@ -96,7 +100,7 @@ exports.getBookings = async (req, res) => {
 // Obtener información de una reserva específica:
 
 exports.getBookingsById = async (req, res) => {
-	const bookingId = parseInt(req.params.id, 10);
+	const bookingId = parseInt(req.params.id);
 	const booking = bookings.find((booking) => booking.id === bookingId);
 
 	if (!booking) {
@@ -112,7 +116,7 @@ exports.getBookingsById = async (req, res) => {
 // Actualizar información de una reserva específica:
 
 exports.updateBookingById = async (req, res) => {
-	const bookingId = parseInt(req.params.id, 10);
+	const bookingId = parseInt(req.params.id);
 	const bookingIndex = bookings.findIndex((booking) => booking.id === bookingId);
 
 	if (bookingIndex === -1) {
@@ -129,7 +133,7 @@ exports.updateBookingById = async (req, res) => {
 // Eliminar una reserva específica:
 
 exports.deleteBookingById = async (req, res) => {
-	const bookingId = parseInt(req.params.id, 10);
+	const bookingId = parseInt(req.params.id);
 	const bookingIndex = bookings.findIndex((booking) => booking.id === bookingId);
 
 	if (bookingIndex === -1) {
