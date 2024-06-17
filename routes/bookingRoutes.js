@@ -29,29 +29,28 @@ const bookingController = require('../controllers/controller');
  *        fecha_creacion:
  *          type: string
  *          description: La fecha de reserva. Si está como un string vacío (""), se reserva con la fecha actual.
- *
  *      required:
- *        - id
  *        - hotel
  *        - tipo_habitacion
  *        - estado_reserva
  *        - num_huespedes
  *        - fecha_creacion
- *
  *      example:
- *
  *        hotel: "Hotel Paraíso"
  *        tipo_habitacion: "familiar"
  *        estado_reserva: "confirmada"
  *        num_huespedes: 3
  *        fecha_creacion: "2024-12-23"
- *
- *
+ */
 
+/**
+ * @swagger
+ * tags:
+ *  name: Reservas
+ *  description: API para la gestión de reservas
  */
 
 // a. Crear Reserva
-
 /**
  * @swagger
  * /api/reservas:
@@ -81,17 +80,44 @@ router.post('/reservas', bookingController.createBooking);
  *  get:
  *    summary: Obtener la lista de reservas.
  *    tags: [Reservas]
+ *    parameters:
+ *      - in: query
+ *        name: hotel
+ *        schema:
+ *          type: string
+ *        description: El nombre del hotel
+ *      - in: query
+ *        name: tipo_habitacion
+ *        schema:
+ *          type: string
+ *        description: El tipo de habitación (vip, matrimonial, single, etc.)
+ *      - in: query
+ *        name: fecha_creacion
+ *        schema:
+ *          type: string
+ *        description: la fecha de la reserva
+ *      - in: query
+ *        name: estado_reserva
+ *        schema:
+ *          type: string
+ *        description: El estado de la reserva (cancelada, confirmada, pendiente, etc.)
+ *      - in: query
+ *        name: num_huespedes
+ *        schema:
+ *          type: integer
+ *        description: El número de huéspedes en la reserva.
  *    responses:
  *      200:
- *        description: Una lista de reservas.
+ *        description: Una lista de reservas que coinciden con la búsqueda.
  *        content:
  *          application/json:
  *            schema:
  *              type: array
  *              items:
  *                $ref: '#/components/schemas/Booking'
+ *      404:
+ *        description: Reserva no encontrada.
  */
-
 router.get('/reservas', bookingController.getBookings);
 
 // c. Obtener información de una reserva específica
@@ -118,7 +144,6 @@ router.get('/reservas', bookingController.getBookings);
  *      404:
  *        description: Reserva no encontrada.
  */
-
 router.get('/reservas/:id', bookingController.getBookingsById);
 
 // d. Actualizar información de un pedido específico
@@ -151,7 +176,6 @@ router.get('/reservas/:id', bookingController.getBookingsById);
  *      404:
  *        description: Reserva no encontrada.
  */
-
 router.put('/reservas/:id', bookingController.updateBookingById);
 
 // e. Eliminar una reserva específica

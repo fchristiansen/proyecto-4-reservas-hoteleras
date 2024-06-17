@@ -3,7 +3,8 @@ const moment = require('moment');
 
 let bookings = [];
 const reservaciones = ' reservaciones';
-// Crear reserva
+
+// a. Crear reserva
 
 exports.createBooking = async (req, res) => {
 	const { hotel, tipo_habitacion, estado_reserva, num_huespedes, fecha_creacion } = req.body;
@@ -18,12 +19,11 @@ exports.createBooking = async (req, res) => {
 	});
 };
 
-// Obtener la lista de reservas
-// y una lista específica segun parámetro de consulta.
+//  b. Obtener la lista de reservas
 
 exports.getBookings = async (req, res) => {
 	const { hotel, fecha_inicio, fecha_fin, tipo_habitacion, estado_reserva, num_huespedes } = req.query;
-	// filtrar reservas por hotel
+	// filtrar reservas por nombre de hotel
 	if (hotel) {
 		const hotelsFiltered = bookings.filter((booking) => booking.hotel === hotel);
 		if (hotelsFiltered.length === 0) {
@@ -81,7 +81,7 @@ exports.getBookings = async (req, res) => {
 	} else if (bookings.length === 0) {
 		// mostrar que no hay reservas
 		return res.json({
-			msg: 'Reservas no encontradas:',
+			msg: 'No se encontraron reservas.',
 			data: bookings,
 		});
 	} else {
@@ -96,7 +96,7 @@ exports.getBookings = async (req, res) => {
 // Obtener información de una reserva específica:
 
 exports.getBookingsById = async (req, res) => {
-	const bookingId = parseInt(req.params.id);
+	const bookingId = parseInt(req.params.id, 10);
 	const booking = bookings.find((booking) => booking.id === bookingId);
 
 	if (!booking) {
@@ -112,7 +112,7 @@ exports.getBookingsById = async (req, res) => {
 // Actualizar información de una reserva específica:
 
 exports.updateBookingById = async (req, res) => {
-	const bookingId = parseInt(req.params.id);
+	const bookingId = parseInt(req.params.id, 10);
 	const bookingIndex = bookings.findIndex((booking) => booking.id === bookingId);
 
 	if (bookingIndex === -1) {
@@ -129,7 +129,7 @@ exports.updateBookingById = async (req, res) => {
 // Eliminar una reserva específica:
 
 exports.deleteBookingById = async (req, res) => {
-	const bookingId = parseInt(req.params.id);
+	const bookingId = parseInt(req.params.id, 10);
 	const bookingIndex = bookings.findIndex((booking) => booking.id === bookingId);
 
 	if (bookingIndex === -1) {
